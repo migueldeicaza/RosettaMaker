@@ -72,19 +72,22 @@ namespace RosettaMaker
 		{
 			string prefix;
 			string name;
+			string suffix;
 
 			if (m.IsSpecialName && m.Name.StartsWith ("get_") || m.Name.StartsWith ("set_")) {
 				prefix = "P%3a";
 				name = m.Name.Substring (4);
 				if (name.StartsWith ("_"))
 					name = name.Substring (1);
+				suffix = " { " + m.Name.Substring (0, 3) + "; }";
 			} else {
 				prefix = "M%3a";
 				name = m.Name;
+				suffix = "(..)";
 			}
 
 			return "<a href='http://iosapi.xamarin.com/monodoc.ashx?link=" + prefix + 
-				m.DeclaringType.FullName + "." + name + "'>" + name + "</a>";
+				m.DeclaringType.FullName + "." + name + "'>" + name + "</a>" + suffix;
 		}
 
 		public string MakeReturn (MethodInfo m)
@@ -98,7 +101,7 @@ namespace RosettaMaker
 				return m.ReturnType.ToString ();
 
 			if (t != null && t.Namespace != null && t.Namespace.StartsWith ("MonoTouch"))
-				return "<a href='http://iosapi.xamarin.com/monodoc.ashx?link=T%3a" + t.FullName + "'>" + t.FullName + (m.ReturnType.IsArray ? "[]" : "") + "</a>";
+				return "<a style='color: lightslategrey' href='http://iosapi.xamarin.com/monodoc.ashx?link=T%3a" + t.FullName + "'>" + t.FullName + (m.ReturnType.IsArray ? "[]" : "") + "</a>";
 
 			switch (t.FullName) {
 			case "System.Int32":
